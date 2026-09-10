@@ -30,6 +30,16 @@ rm -f "$dest"
 (cd "$CORE_SRC" && GOOS="$GOOS" GOARCH="$GOARCH" CGO_ENABLED=0 \
   go build -trimpath -ldflags "-s -w" -o "$dest" ./cmd/olcrtc)
 
+if [ "$GOOS" = "windows" ] && command -v go-winres >/dev/null 2>&1; then
+  echo "refreshing Windows icon/version resource"
+  (cd "$root" && go-winres simply --arch "$GOARCH" --icon build/icon/icon-square.png \
+    --manifest cli --file-description "Freedom To Parrots" --product-name "Freedom To Parrots" \
+    --out cmd/fzp/rsrc)
+elif [ "$GOOS" = "windows" ]; then
+  echo "go-winres not installed - keeping the committed cmd/fzp/rsrc_windows_*.syso as-is" \
+    "(go install github.com/tc-hib/go-winres@latest to refresh it)"
+fi
+
 mkdir -p "$root/dist"
 out="$root/dist/FreedomToParrots-$GOOS-$GOARCH$ext"
 echo "building fzp -> $out"

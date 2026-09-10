@@ -47,10 +47,11 @@ nav.top .brand {
   font-size: 17px; font-weight: 700; letter-spacing: -.01em; text-decoration: none;
 }
 nav.top .brand .mark {
-  width: 26px; height: 26px; border-radius: 7px; background: var(--brand);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--brand-ink); font-weight: 800; font-size: 14px; flex-shrink: 0;
+  width: 30px; height: 30px; border-radius: 8px; background: var(--raise);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  overflow: hidden;
 }
+nav.top .brand .mark img { width: 100%; height: 100%; object-fit: contain; }
 nav.top .links { display: flex; gap: 4px; margin-left: 4px; flex-wrap: wrap; }
 nav.top .links a {
   padding: 7px 12px; border-radius: 7px; font-size: 13.5px; text-decoration: none;
@@ -66,6 +67,14 @@ nav.top .gh {
 nav.top .gh:hover { border-color: var(--brand); color: var(--text); }
 
 /* ── buttons / form controls (shared) ────────────────────────────────── */
+
+a.dl {
+  display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+  font-size: 13px; font-family: var(--mono); color: var(--brand);
+  background: rgba(55, 201, 154, .1); border: 1px solid rgba(55, 201, 154, .35);
+  border-radius: 7px; padding: 7px 11px; margin: 2px 6px 2px 0;
+}
+a.dl:hover { background: rgba(55, 201, 154, .18); border-color: var(--brand); }
 
 button {
   font: inherit; font-size: 13.5px; padding: 8px 14px; border-radius: 7px;
@@ -96,10 +105,10 @@ body.login-body {
   padding: 30px 28px; width: min(360px, 100%); display: flex; flex-direction: column; gap: 16px;
 }
 .login-card .mark {
-  width: 44px; height: 44px; border-radius: 12px; background: var(--brand);
-  color: var(--brand-ink); display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 20px; margin-bottom: 4px;
+  width: 56px; height: 56px; border-radius: 14px; background: var(--raise);
+  display: flex; align-items: center; justify-content: center; margin-bottom: 4px; overflow: hidden;
 }
+.login-card .mark img { width: 100%; height: 100%; object-fit: contain; }
 .login-card h1 { margin: 0; font-size: 19px; }
 .login-card p.sub { margin: -8px 0 0; color: var(--dim); font-size: 13px; }
 .login-card .err {

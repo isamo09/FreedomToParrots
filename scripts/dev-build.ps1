@@ -36,6 +36,16 @@ try {
     Pop-Location
 }
 
+if ($goos -eq "windows" -and (Get-Command go-winres -ErrorAction SilentlyContinue)) {
+    Write-Host "refreshing Windows icon/version resource"
+    go-winres simply --arch $goarch --icon "$root\build\icon\icon-square.png" `
+        --manifest cli --file-description "Freedom To Parrots" --product-name "Freedom To Parrots" `
+        --out "$root\cmd\fzp\rsrc"
+} elseif ($goos -eq "windows") {
+    Write-Host "go-winres not installed - keeping the committed cmd\fzp\rsrc_windows_*.syso as-is" `
+        "(go install github.com/tc-hib/go-winres@latest to refresh it)"
+}
+
 New-Item -ItemType Directory -Force -Path "$root\dist" | Out-Null
 $out = "$root\dist\FreedomToParrots-$goos-$goarch$ext"
 Write-Host "building fzp -> $out"

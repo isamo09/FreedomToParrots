@@ -89,6 +89,27 @@ jobs:
           rm -f "$dest"
           go build -trimpath -ldflags "-s -w" -o "$dest" ./cmd/olcrtc
 
+      - name: Refresh Windows icon/version resource
+        if: matrix.goos == 'windows'
+        env:
+          GOFLAGS: ""
+        run: |
+          set -euo pipefail
+          go install github.com/tc-hib/go-winres@latest
+          ver="${GITHUB_REF_NAME#v}"
+          [[ "$ver" =~ ^[0-9]+(\.[0-9]+){0,3}$ ]] || ver="0.0.0"
+          go-winres simply \
+            --arch ${{ matrix.goarch }} \
+            --icon build/icon/icon-square.png \
+            --manifest cli \
+            --file-description "Freedom To Parrots" \
+            --product-name "Freedom To Parrots" \
+            --file-version "$ver" \
+            --product-version "$ver" \
+            --original-filename "FreedomToParrots-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.ext }}" \
+            --copyright "Freedom To Parrots" \
+            --out cmd/fzp/rsrc
+
       - name: Build Freedom To Parrots for ${{ matrix.goos }}/${{ matrix.goarch }}
         env:
           GOOS: ${{ matrix.goos }}

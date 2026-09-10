@@ -3,3 +3,7 @@
 # the placeholder bytes committed here need to stay byte-for-byte stable.
 internal/corebin/bin/core -text
 internal/corebin/bin/core.exe -text
+
+# Binary assets - never touch line endings
+*.png -text
+*.syso -text

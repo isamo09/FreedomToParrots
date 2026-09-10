@@ -7,5 +7,5 @@ import "embed"
 // (instead of Go string literals) is what makes editing the UI pleasant:
 // syntax highlighting, no escaping, a real diff per change.
 //
-//go:embed assets/*.html assets/*.css assets/*.js
+//go:embed assets/*.html assets/*.css assets/*.js assets/img/*.png
 var assets embed.FS

@@ -4,12 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Freedom To Parrots — клиент и инструкции</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicon-192.png">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
 <div class="shell">
   <nav class="top">
-    <a class="brand" href="/"><span class="mark">FP</span>Freedom To Parrots</a>
+    <a class="brand" href="/"><span class="mark"><img src="/assets/img/favicon-192.png" alt=""></span>Freedom To Parrots</a>
     <div class="links">
       <a href="/">Панель</a>
       <a href="/download" class="current">Клиент и инструкции</a>
@@ -38,16 +41,16 @@
     <a href="#macos">macOS</a>
     <a href="#android">Android / Termux</a>
     <a href="#other">Другие ОС</a>
-    <a href="#client">Клиентское устройство</a>
+    <a href="#client">Клиент (olcBOX)</a>
     <a href="#faq">Вопросы</a>
   </nav>
 
   <section class="plat" id="windows">
     <h2><span class="badge">Сервер</span>Windows</h2>
     <p class="lead">Один <code class="mono">.exe</code>, ничего не устанавливается.</p>
+    <p><a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-windows-amd64.exe">⭳ FreedomToParrots-windows-amd64.exe</a></p>
     <ol>
-      <li>Скачайте <code class="mono">FreedomToParrots-windows-amd64.exe</code> из
-        <a href="https://github.com/isamo09/FreedomToParrots/releases/latest" target="_blank" rel="noopener noreferrer">последнего релиза</a>.</li>
+      <li>Скачайте файл по ссылке выше (это всегда сборка из последнего релиза).</li>
       <li>Запустите двойным кликом — откроется отдельное окно консоли. Windows SmartScreen
         может предупредить про «неизвестного издателя»: это ожидаемо для нового публичного
         релиза без платной подписи — «Подробнее → Выполнить в любом случае».</li>
@@ -65,10 +68,13 @@
   <section class="plat" id="linux">
     <h2><span class="badge">Сервер</span>Linux</h2>
     <p class="lead">Статический бинарник, без зависимостей — подходит для любого дистрибутива и для VPS.</p>
+    <p>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-linux-amd64">⭳ FreedomToParrots-linux-amd64</a>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-linux-arm64">⭳ FreedomToParrots-linux-arm64</a>
+    </p>
     <ol>
-      <li>Скачайте бинарник под вашу архитектуру: <code class="mono">FreedomToParrots-linux-amd64</code>
-        (обычный сервер/ПК) или <code class="mono">FreedomToParrots-linux-arm64</code> (ARM-сервер,
-        Raspberry Pi).</li>
+      <li>Скачайте бинарник под вашу архитектуру: amd64 — обычный сервер/ПК, arm64 — ARM-сервер,
+        Raspberry Pi.</li>
       <li>Сделайте исполняемым и запустите:
         <div class="callout mono" style="margin-top:6px">chmod +x FreedomToParrots-linux-amd64<br>./FreedomToParrots-linux-amd64</div>
       </li>
@@ -82,9 +88,12 @@
   <section class="plat" id="macos">
     <h2><span class="badge">Сервер</span>macOS</h2>
     <p class="lead">Отдельные сборки под Intel и Apple Silicon.</p>
+    <p>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-darwin-arm64">⭳ FreedomToParrots-darwin-arm64 (M1/M2/M3/M4)</a>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-darwin-amd64">⭳ FreedomToParrots-darwin-amd64 (Intel)</a>
+    </p>
     <ol>
-      <li>Скачайте <code class="mono">FreedomToParrots-darwin-arm64</code> (M1/M2/M3/M4) или
-        <code class="mono">FreedomToParrots-darwin-amd64</code> (Intel).</li>
+      <li>Скачайте файл по ссылке выше — под свой процессор.</li>
       <li>В Терминале: <span class="mono">chmod +x FreedomToParrots-darwin-arm64 &amp;&amp;
         ./FreedomToParrots-darwin-arm64</span></li>
       <li>Gatekeeper спросит про неподписанный бинарник — разрешите запуск через
@@ -97,10 +106,11 @@
     <h2><span class="badge">Сервер · экспериментально</span>Android / Termux</h2>
     <p class="lead">Termux — это обычный aarch64 Linux userland, поэтому туда идёт
       <code class="mono">FreedomToParrots-linux-arm64</code>.</p>
+    <p><a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-linux-arm64">⭳ FreedomToParrots-linux-arm64</a></p>
     <ol>
       <li>Установите <a href="https://f-droid.org/packages/com.termux/" target="_blank" rel="noopener noreferrer">Termux</a> (из F-Droid — версия из Google Play устарела и не обновляется).</li>
-      <li>Скачайте <code class="mono">FreedomToParrots-linux-arm64</code> прямо в Termux:
-        <span class="mono">curl -LO &lt;ссылка на релиз&gt;</span></li>
+      <li>Скачайте бинарник прямо в Termux:
+        <div class="callout mono" style="margin-top:6px">curl -LO https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-linux-arm64</div></li>
       <li><span class="mono">chmod +x FreedomToParrots-linux-arm64 &amp;&amp; ./FreedomToParrots-linux-arm64</span></li>
     </ol>
     <div class="callout"><b>Известное ограничение:</b> на Android 11+ (API 30+) без root SELinux
@@ -114,11 +124,14 @@
   <section class="plat" id="other">
     <h2><span class="badge">Сервер</span>FreeBSD, OpenBSD и другие</h2>
     <p class="lead">Ядро туннеля собирается для FreeBSD и OpenBSD (amd64/arm64) без cgo, так что
-      релиз включает и их: <code class="mono">FreedomToParrots-freebsd-amd64</code>,
-      <code class="mono">FreedomToParrots-freebsd-arm64</code>,
-      <code class="mono">FreedomToParrots-openbsd-amd64</code>,
-      <code class="mono">FreedomToParrots-openbsd-arm64</code>. Запуск — так же, как на Linux
-      (сделать исполняемым и запустить из терминала).</p>
+      релиз включает и их. Запуск — так же, как на Linux (сделать исполняемым и запустить из
+      терминала).</p>
+    <p>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-freebsd-amd64">⭳ freebsd-amd64</a>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-freebsd-arm64">⭳ freebsd-arm64</a>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-openbsd-amd64">⭳ openbsd-amd64</a>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-openbsd-arm64">⭳ openbsd-arm64</a>
+    </p>
     <div class="callout">Нужна сборка под ОС, которой нет в списке? Ядро туннеля и эта панель —
       чистый Go без cgo, кросс-компиляция на любую поддерживаемую Go платформу — вопрос правки
       матрицы в <code class="mono">.github/workflows/release.yml</code>. Заводите issue в
@@ -126,20 +139,38 @@
   </section>
 
   <section class="plat" id="client">
-    <h2><span class="badge">Клиент</span>Подключение устройства</h2>
+    <h2><span class="badge">Клиент</span>Подключение устройства — olcBOX</h2>
     <p class="lead">В панели каждое добавленное устройство получает свой QR-код и строку
       подключения вида <code class="mono">olcrtc://provider?transport@room#key$name</code>.
-      Готовое приложение с разбором QR-кода для этого репозитория ещё готовится — кнопка
-      «Скачать последнюю версию» выше всегда ведёт на актуальный релиз, и клиент появится там же,
-      как только будет готов.</p>
+      Разобрать их умеет готовое GUI-приложение <b>olcBOX</b> — сторонний мультиплатформенный
+      клиент olcrtc (не часть этого репозитория, но его сборки лежат в том же релизе для удобства).</p>
+    <p>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/Olcbox-1.0.127-android-universal-release.apk">⭳ Android (.apk, universal)</a>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/Olcbox-1.0.127-windows-amd64-portable.zip">⭳ Windows (portable .zip)</a>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/Olcbox-1.0.127-macos-arm64.dmg">⭳ macOS Apple Silicon (.dmg)</a>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/Olcbox-1.0.127-macos-amd64.dmg">⭳ macOS Intel (.dmg)</a>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/Olcbox-1.0.127-linux-amd64.AppImage">⭳ Linux (.AppImage)</a>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/Olcbox-1.0.127-ios-unsigned.ipa">⭳ iOS (.ipa, неподписанный)</a>
+    </p>
+    <ol>
+      <li>Установите файл под свою платформу (Android/Windows/AppImage запускаются сразу; iOS
+        требует подписи/sideload, macOS — снять карантин Gatekeeper, как и для самой панели).</li>
+      <li>В панели откройте карточку устройства → «Ключ и QR» и отсканируйте QR прямо в olcBOX,
+        либо скопируйте строку подключения и вставьте её в приложение вручную.</li>
+    </ol>
     <div class="callout">
-      <b>Уже сейчас, вручную:</b> тот же исполняемый файл Freedom To Parrots содержит то же самое
-      ядро туннеля, которое умеет работать и клиентом (режим <code class="mono">cnc</code>) —
-      получившийся туннель поднимает локальный SOCKS5-прокси. Формат конфигурации и разбор
-      строки подключения описаны в
+      <b>Контрольные суммы:</b> файлы olcBOX сопровождает
+      <a class="mono" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/SHA256SUMS.txt">SHA256SUMS.txt</a>
+      из релиза апстрима — сверьте перед установкой, если это важно для вашей модели угроз.
+      Исходники и другие варианты сборки (arm64/armeabi APK, exe/msi для Windows):
+      <a href="https://github.com/alananisimov/olcbox" target="_blank" rel="noopener noreferrer">alananisimov/olcbox</a>.
+    </div>
+    <div class="callout">
+      <b>Без стороннего приложения, вручную:</b> тот же исполняемый файл Freedom To Parrots
+      содержит то же самое ядро туннеля, которое умеет работать и клиентом (режим
+      <code class="mono">cnc</code>) — получившийся туннель поднимает локальный SOCKS5-прокси.
+      Формат конфигурации и разбор строки подключения описаны в
       <a href="https://github.com/openlibrecommunity/olcrtc/blob/master/docs/uri.md" target="_blank" rel="noopener noreferrer">документации ядра (uri.md)</a>.
-      Пошаговая инструкция и готовое приложение появятся в этом репозитории —
-      следите за <a href="https://github.com/isamo09/FreedomToParrots/releases" target="_blank" rel="noopener noreferrer">релизами</a>.
     </div>
   </section>
 
