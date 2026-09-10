@@ -7,3 +7,4 @@ internal/corebin/bin/core.exe -text
 # Binary assets - never touch line endings
 *.png -text
 *.syso -text
+docs/FreedomToParrots.docx -text

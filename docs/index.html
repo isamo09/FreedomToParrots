@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Freedom To Parrots — свобода попугаям, нет белым спискам</title>
+<meta name="description" content="Freedom To Parrots — один исполняемый файл, который прячет интернет-трафик внутри обычного видеозвонка (Jitsi, Яндекс Телемост, WbStream) и открывает доступ к сайтам там, где он ограничен. Windows, Linux, macOS, Android/Termux.">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="shell">
+  <nav class="top">
+    <a class="brand" href="#top"><span class="mark"><img src="img/favicon-192.png" alt=""></span>Freedom To Parrots</a>
+    <div class="links">
+      <a href="#start">Быстрый старт</a>
+      <a href="#windows">Установка</a>
+      <a href="#client">Клиент</a>
+      <a href="#faq">Вопросы</a>
+    </div>
+    <div class="spacer"></div>
+    <a class="gh" href="https://github.com/isamo09/FreedomToParrots" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+  </nav>
+
+  <div class="hero" id="top">
+    <h1>Свобода попугаям. Нет белым спискам.</h1>
+    <p>Freedom To Parrots — проект, с помощью которого любой желающий, имея обычный ПК,
+      телефон или ноутбук, может развернуть туннель для интернет-трафика внутри интернет-звонка,
+      чтобы получить доступ к сайтам там, где это необходимо. Запуск занимает пару кликов и даёт
+      медленное, но рабочее соединение при его отсутствии. Разворачивается на Windows, Linux,
+      Android (Termux) и любых других платформах — вся программа (панель управления и ядро
+      туннеля) собрана в один исполняемый файл под каждую из них.</p>
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/isamo09/FreedomToParrots/releases/latest"
+         target="_blank" rel="noopener noreferrer">Скачать последнюю версию ↗</a>
+      <a class="btn secondary" href="https://github.com/isamo09/FreedomToParrots"
+         target="_blank" rel="noopener noreferrer">Исходный код и релизы ↗</a>
+    </div>
+  </div>
+
+  <section class="plat" id="start">
+    <h2><span class="badge">Коротко</span>Быстрый старт</h2>
+    <p class="lead">Полная версия — в разделах установки ниже, здесь — общая идея в шести шагах.</p>
+    <ol>
+      <li>Выберите, где будет <b>сервер</b>, к которому подключаются клиенты — это может быть любой
+        ПК, ноутбук или даже телефон — и скачайте под него совместимую сборку из
+        <a href="https://github.com/isamo09/FreedomToParrots/releases/latest" target="_blank" rel="noopener noreferrer">последнего релиза</a>.</li>
+      <li>Переместите исполняемый файл в папку, где он будет постоянно работать (рядом с ним
+        сам появится каталог с настройками и ключами).</li>
+      <li>Запустите его и откройте панель управления по адресу из консоли, войдя по
+        отображённому там паролю.</li>
+      <li>В панели нажмите «Добавить устройство», указав ссылку на активный звонок — например,
+        на Яндекс Телемосте.</li>
+      <li>Получите QR-код или ключ для настройки подключения этого устройства.</li>
+      <li>Для подключения скачайте клиент <b>olcBOX</b> (ссылки в разделе «Клиент» ниже) и
+        добавьте в него полученную конфигурацию.</li>
+    </ol>
+    <div class="callout">Для устойчивой работы рекомендуется выйти из самого звонка в
+      клиенте-звонилке, не завершая его — интернет-туннель при этом продолжит работать.</div>
+  </section>
+
+  <nav class="toc">
+    <a href="#windows">Windows</a>
+    <a href="#linux">Linux</a>
+    <a href="#macos">macOS</a>
+    <a href="#android">Android / Termux</a>
+    <a href="#other">Другие ОС</a>
+    <a href="#client">Клиент (olcBOX)</a>
+    <a href="#faq">Вопросы</a>
+  </nav>
+
+  <section class="plat" id="windows">
+    <h2><span class="badge">Сервер</span>Windows</h2>
+    <p class="lead">Один <code class="mono">.exe</code>, ничего не устанавливается.</p>
+    <p><a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-windows-amd64.exe">⭳ FreedomToParrots-windows-amd64.exe</a></p>
+    <ol>
+      <li>Скачайте файл по ссылке выше (это всегда сборка из последнего релиза).</li>
+      <li>Запустите двойным кликом — откроется отдельное окно консоли с иконкой и названием
+        Freedom To Parrots. Windows SmartScreen может предупредить про «неизвестного издателя»:
+        это ожидаемо для нового публичного релиза без платной подписи —
+        «Подробнее → Выполнить в любом случае».</li>
+      <li>В консоли появится адрес панели (кликабельный) и пароль, сгенерированный при первом
+        запуске.</li>
+      <li>Откройте адрес в браузере на этом же компьютере (или с телефона в той же сети — тогда
+        подойдёт адрес вида <code class="mono">http://192.168.x.x:8858/</code>), войдите по
+        паролю.</li>
+    </ol>
+    <div class="callout"><b>Крестик на окне не закрывает программу сразу.</b> Первый клик
+      покажет предупреждение и ничего не остановит, второй клик (в течение нескольких секунд) —
+      закроет и корректно остановит все туннели. Чтобы просто оставить работать в фоне — сверните
+      окно вместо закрытия, или используйте Планировщик заданий Windows для запуска при входе.</div>
+  </section>
+
+  <section class="plat" id="linux">
+    <h2><span class="badge">Сервер</span>Linux</h2>
+    <p class="lead">Статический бинарник, без зависимостей — подходит для любого дистрибутива и для VPS.</p>
+    <p>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-linux-amd64">⭳ FreedomToParrots-linux-amd64</a>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-linux-arm64">⭳ FreedomToParrots-linux-arm64</a>
+    </p>
+    <ol>
+      <li>Скачайте бинарник под вашу архитектуру: amd64 — обычный сервер/ПК, arm64 — ARM-сервер,
+        Raspberry Pi.</li>
+      <li>Сделайте исполняемым и запустите:
+        <div class="callout mono" style="margin-top:6px">chmod +x FreedomToParrots-linux-amd64<br>./FreedomToParrots-linux-amd64</div>
+      </li>
+      <li>Адрес панели и пароль будут выведены прямо в терминал.</li>
+      <li>Чтобы панель продолжала работать после закрытия терминала — запустите её в
+        <code class="mono">tmux</code>/<code class="mono">screen</code>, или через
+        <code class="mono">systemd</code> (юнит с <code class="mono">ExecStart=/путь/до/FreedomToParrots-linux-amd64</code>).</li>
+    </ol>
+  </section>
+
+  <section class="plat" id="macos">
+    <h2><span class="badge">Сервер</span>macOS</h2>
+    <p class="lead">Отдельные сборки под Intel и Apple Silicon.</p>
+    <p>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-darwin-arm64">⭳ FreedomToParrots-darwin-arm64 (M1/M2/M3/M4)</a>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-darwin-amd64">⭳ FreedomToParrots-darwin-amd64 (Intel)</a>
+    </p>
+    <ol>
+      <li>Скачайте файл по ссылке выше — под свой процессор.</li>
+      <li>В Терминале: <span class="mono">chmod +x FreedomToParrots-darwin-arm64 &amp;&amp;
+        ./FreedomToParrots-darwin-arm64</span></li>
+      <li>Gatekeeper спросит про неподписанный бинарник — разрешите запуск через
+        «Системные настройки → Конфиденциальность и безопасность → Всё равно открыть».</li>
+      <li>Адрес и пароль панели появятся в Терминале.</li>
+    </ol>
+  </section>
+
+  <section class="plat" id="android">
+    <h2><span class="badge">Сервер · экспериментально</span>Android / Termux</h2>
+    <p class="lead">Termux — это обычный aarch64 Linux userland, поэтому туда идёт
+      <code class="mono">FreedomToParrots-linux-arm64</code>.</p>
+    <p><a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-linux-arm64">⭳ FreedomToParrots-linux-arm64</a></p>
+    <ol>
+      <li>Установите <a href="https://f-droid.org/packages/com.termux/" target="_blank" rel="noopener noreferrer">Termux</a> (из F-Droid — версия из Google Play устарела и не обновляется).</li>
+      <li>Скачайте бинарник прямо в Termux:
+        <div class="callout mono" style="margin-top:6px">curl -LO https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-linux-arm64</div></li>
+      <li><span class="mono">chmod +x FreedomToParrots-linux-arm64 &amp;&amp; ./FreedomToParrots-linux-arm64</span></li>
+    </ol>
+    <div class="callout"><b>Известное ограничение:</b> на Android 11+ (API 30+) без root SELinux
+      запрещает домену <code class="mono">untrusted_app</code>, в котором работает Termux, читать
+      список сетевых интерфейсов через netlink — из-за этого сбор ICE-кандидатов может не пройти.
+      На Android ≤10 или на рутованном Termux ограничения нет. Если сервер поднимаете не на
+      телефоне, а телефон нужен только как <em>клиент</em>, подключающийся к панели через браузер —
+      это ограничение вас не касается.</div>
+  </section>
+
+  <section class="plat" id="other">
+    <h2><span class="badge">Сервер</span>FreeBSD, OpenBSD и другие</h2>
+    <p class="lead">Ядро туннеля собирается для FreeBSD и OpenBSD (amd64/arm64) без cgo, так что
+      релиз включает и их. Запуск — так же, как на Linux (сделать исполняемым и запустить из
+      терминала).</p>
+    <p>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-freebsd-amd64">⭳ freebsd-amd64</a>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-freebsd-arm64">⭳ freebsd-arm64</a>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-openbsd-amd64">⭳ openbsd-amd64</a>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-openbsd-arm64">⭳ openbsd-arm64</a>
+    </p>
+    <div class="callout">Нужна сборка под ОС, которой нет в списке? Ядро туннеля и эта панель —
+      чистый Go без cgo, кросс-компиляция на любую поддерживаемую Go платформу — вопрос правки
+      матрицы в <code class="mono">.github/workflows/release.yml</code>. Заводите issue в
+      <a href="https://github.com/isamo09/FreedomToParrots/issues" target="_blank" rel="noopener noreferrer">репозитории</a>.</div>
+  </section>
+
+  <section class="plat" id="client">
+    <h2><span class="badge">Клиент</span>Подключение устройства — olcBOX</h2>
+    <p class="lead">В панели каждое добавленное устройство получает свой QR-код и строку
+      подключения вида <code class="mono">olcrtc://provider?transport@room#key$name</code>.
+      Разобрать их умеет готовое GUI-приложение <b>olcBOX</b> — сторонний мультиплатформенный
+      клиент olcrtc (не часть этого репозитория, но его сборки лежат в том же релизе для удобства).</p>
+    <p>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/Olcbox-1.0.127-android-universal-release.apk">⭳ Android (.apk, universal)</a>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/Olcbox-1.0.127-windows-amd64-portable.zip">⭳ Windows (portable .zip)</a>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/Olcbox-1.0.127-macos-arm64.dmg">⭳ macOS Apple Silicon (.dmg)</a>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/Olcbox-1.0.127-macos-amd64.dmg">⭳ macOS Intel (.dmg)</a>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/Olcbox-1.0.127-linux-amd64.AppImage">⭳ Linux (.AppImage)</a>
+      <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/Olcbox-1.0.127-ios-unsigned.ipa">⭳ iOS (.ipa, неподписанный)</a>
+    </p>
+    <ol>
+      <li>Установите файл под свою платформу (Android/Windows/AppImage запускаются сразу; iOS
+        требует подписи/sideload, macOS — снять карантин Gatekeeper, как и для самой панели).</li>
+      <li>В панели откройте карточку устройства → «Ключ и QR» и отсканируйте QR прямо в olcBOX,
+        либо скопируйте строку подключения и вставьте её в приложение вручную.</li>
+    </ol>
+    <div class="callout">
+      <b>Контрольные суммы:</b> файлы olcBOX сопровождает
+      <a class="mono" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/SHA256SUMS.txt">SHA256SUMS.txt</a>
+      из релиза апстрима — сверьте перед установкой, если это важно для вашей модели угроз.
+      Исходники и другие варианты сборки (arm64/armeabi APK, exe/msi для Windows):
+      <a href="https://github.com/alananisimov/olcbox" target="_blank" rel="noopener noreferrer">alananisimov/olcbox</a>.
+    </div>
+    <div class="callout">
+      <b>Без стороннего приложения, вручную:</b> тот же исполняемый файл Freedom To Parrots
+      содержит то же самое ядро туннеля, которое умеет работать и клиентом (режим
+      <code class="mono">cnc</code>) — получившийся туннель поднимает локальный SOCKS5-прокси.
+      Формат конфигурации и разбор строки подключения описаны в
+      <a href="https://github.com/openlibrecommunity/olcrtc/blob/master/docs/uri.md" target="_blank" rel="noopener noreferrer">документации ядра (uri.md)</a>.
+    </div>
+  </section>
+
+  <section class="faq" id="faq">
+    <h2>Частые вопросы</h2>
+    <details>
+      <summary>Где взять пароль от панели?</summary>
+      <p>Он генерируется случайно при самом первом запуске и всегда выводится в консоли, из
+        которой запущена программа — прокрутите её вывод вверх, если пропустили. Изменить пароль
+        можно, отредактировав <code class="mono">data/settings.json</code> рядом с исполняемым
+        файлом, и перезапустив программу.</p>
+    </details>
+    <details>
+      <summary>Почему при первом запуске пишет «недоступно на этой ОС» про трафик?</summary>
+      <p>Точный подсчёт переданных байт использует системные счётчики процесса, которые Freedom
+        To Parrots сейчас умеет читать на Linux и Windows. На macOS/BSD сессии работают
+        полностью, просто колонка трафика показывает «недоступно» вместо числа.</p>
+    </details>
+    <details>
+      <summary>Больше 5 устройств — это правда проблема?</summary>
+      <p>Не запрет, а предупреждение: каждое устройство — это отдельный замаскированный
+        видеозвонок, и много одновременных звонков с одного адреса начинают заметно нагружать
+        канал и делать поведение более отличимым от обычного пользователя. Панель покажет
+        предупреждение, но не остановит сессии сама.</p>
+    </details>
+    <details>
+      <summary>Ссылка на звонок «протухла» — что делать?</summary>
+      <p>Провайдеры звонков (Телемост, WbStream) не гарантируют вечную жизнь комнаты. Если панель
+        показывает предупреждение о недоступности для устройства, которое раньше подключалось,
+        создайте новую комнату у провайдера и обновите Room ID через «Изменить» в карточке
+        устройства — ключ шифрования и настройки транспорта при этом сохранятся.</p>
+    </details>
+    <details>
+      <summary>Может ли аккаунт в сервисе звонков пострадать от такого использования?</summary>
+      <p>Формально это использование сервиса не по прямому назначению, поэтому исключать
+        ограничение или блокировку аккаунта за чрезмерную активность нельзя — это риск того, кто
+        принимает решение так делать. На момент публикации авторам о подтверждённых случаях
+        блокировок за это неизвестно, но это не гарантия на будущее.</p>
+    </details>
+  </section>
+
+  <footer class="page">
+    <p>Freedom To Parrots — панель управления и сборка ядра
+      <a href="https://github.com/openlibrecommunity/olcrtc" target="_blank" rel="noopener noreferrer">openlibrecommunity/olcrtc</a>
+      (автор ядра — zarazaex) в один самодостаточный файл. Клиент olcBOX — независимый проект
+      <a href="https://github.com/alananisimov/olcbox" target="_blank" rel="noopener noreferrer">alananisimov/olcbox</a>.
+      Исходники: <a href="https://github.com/isamo09/FreedomToParrots" target="_blank" rel="noopener noreferrer">github.com/isamo09/FreedomToParrots</a>.</p>
+    <p>Эта страница и сама программа публикуются как есть, в исследовательских и образовательных
+      целях. Всё описанное выше — исключительно добровольное решение того, кто это делает; автор
+      никого не призывает обходить ограничения, блокировки или правила сервисов-провайдеров и не
+      несёт ответственности за то, как и для чего инструмент используется. Соблюдение
+      законодательства своей страны и условий использования соответствующих сервисов — зона
+      ответственности того, кто запускает программу.</p>
+  </footer>
+</div>
+</body>
+</html>
