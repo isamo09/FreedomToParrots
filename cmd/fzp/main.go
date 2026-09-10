@@ -86,7 +86,7 @@ func run() error {
 		}
 	}()
 
-	dash := console.New(mgr, panelURLs(host, port), settings.Password, dataNote, version)
+	dash := console.New(mgr, panelURLs(host, port), settings.Password, dataNote, version, stop)
 	dash.Run(ctx) // blocks until Ctrl+C / SIGTERM
 
 	shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)

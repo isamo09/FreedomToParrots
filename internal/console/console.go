@@ -27,6 +27,13 @@ const (
 	refreshEvery = 2 * time.Second
 )
 
+// windowTitle is the console/terminal window title - set once at startup so
+// the taskbar/tab shows the app's name instead of an exe path. The window
+// *icon* on Windows comes for free from the exe's own resource (see
+// term_windows.go); other OSes don't have an equivalent for a plain
+// terminal-hosted process.
+const windowTitle = "Freedom To Parrots"
+
 // Dashboard owns what gets drawn on every refresh.
 type Dashboard struct {
 	mgr      *session.Manager
@@ -34,17 +41,23 @@ type Dashboard struct {
 	password string
 	note     string // optional one-line operator notice (e.g. data dir fallback)
 	version  string
+	cancel   context.CancelFunc
 }
 
 // New builds a dashboard. urls is every address the panel can be reached
-// at (LAN + loopback); the first is treated as primary.
-func New(mgr *session.Manager, urls []string, password, note, version string) *Dashboard {
-	return &Dashboard{mgr: mgr, urls: urls, password: password, note: note, version: version}
+// at (LAN + loopback); the first is treated as primary. cancel is called to
+// trigger graceful shutdown - Ctrl+C already goes through the caller's own
+// context, but on Windows the dashboard also wires it up to the window's
+// close button (see term_windows.go).
+func New(mgr *session.Manager, urls []string, password, note, version string, cancel context.CancelFunc) *Dashboard {
+	return &Dashboard{mgr: mgr, urls: urls, password: password, note: note, version: version, cancel: cancel}
 }
 
 // Run redraws the dashboard every couple of seconds until ctx is cancelled.
 func (d *Dashboard) Run(ctx context.Context) {
 	enablePretty()
+	setTitle(windowTitle)
+	watchCloseButton(d.cancel)
 
 	t := time.NewTicker(refreshEvery)
 	defer t.Stop()
@@ -66,8 +79,9 @@ func (d *Dashboard) draw() {
 
 	var b strings.Builder
 
+	b.WriteString(oscTitle(windowTitle))
 	b.WriteString(clear)
-	b.WriteString(bold + "  Freedom To Parrots" + reset + dim + " " + d.version + " — панель управления" + reset + "\n\n")
+	b.WriteString(bold + "  " + windowTitle + reset + dim + " " + d.version + " — панель управления" + reset + "\n\n")
 
 	for _, u := range d.urls {
 		b.WriteString("  Панель:   " + hyperlink(u) + "\n")
@@ -77,6 +91,10 @@ func (d *Dashboard) draw() {
 
 	if d.note != "" {
 		b.WriteString("  " + yellow + d.note + reset + "\n")
+	}
+
+	if w := closeWarning(); w != "" {
+		b.WriteString("\n  " + red + bold + "! " + reset + red + w + reset + "\n")
 	}
 
 	b.WriteString("\n")
@@ -90,6 +108,16 @@ func (d *Dashboard) draw() {
 
 func hyperlink(url string) string {
 	return "\x1b]8;;" + url + "\x1b\\" + bold + url + reset + "\x1b]8;;\x1b\\"
+}
+
+// oscTitle sets the terminal window/tab title via the OSC 0 escape
+// sequence, understood by essentially every terminal emulator (xterm,
+// gnome-terminal, iTerm2, Windows Terminal). Harmless no-op bytes on
+// anything that doesn't support it, including when stdout is redirected to
+// a file. On Windows this complements the native SetConsoleTitleW call in
+// term_windows.go, which covers the legacy console host too.
+func oscTitle(title string) string {
+	return "\x1b]0;" + title + "\x07"
 }
 
 const (
