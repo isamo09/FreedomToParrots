@@ -1,0 +1,10 @@
+# local build output
+/dist/
+
+# runtime state created on first run (password, session keys, logs) -
+# never commit secrets/state
+/data/
+
+# OS/editor cruft
+.DS_Store
+Thumbs.db

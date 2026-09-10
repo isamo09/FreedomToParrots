@@ -1,0 +1,135 @@
+name: Release
+
+# Builds the real, single-file Freedom To Parrots binary for every
+# supported platform: fetches the olcrtc tunnel core from its upstream
+# repo (github.com/openlibrecommunity/olcrtc), cross-compiles it for the
+# same target, embeds it into this program via go:embed (see
+# internal/corebin), and uploads one self-contained executable per
+# platform. Pushing a `v*` tag also publishes them as a GitHub Release.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      core_ref:
+        description: "openlibrecommunity/olcrtc git ref (tag/branch/sha) to build the tunnel core from"
+        required: false
+        default: "v0.0.1"
+
+env:
+  GO_VERSION: "1.27.x"
+  DEFAULT_CORE_REF: "v0.0.1"
+
+jobs:
+  build:
+    name: ${{ matrix.goos }}/${{ matrix.goarch }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - goos: windows
+            goarch: amd64
+            ext: ".exe"
+          - goos: linux
+            goarch: amd64
+            ext: ""
+          - goos: linux
+            goarch: arm64
+            ext: ""
+          - goos: darwin
+            goarch: amd64
+            ext: ""
+          - goos: darwin
+            goarch: arm64
+            ext: ""
+          - goos: freebsd
+            goarch: amd64
+            ext: ""
+          - goos: freebsd
+            goarch: arm64
+            ext: ""
+          - goos: openbsd
+            goarch: amd64
+            ext: ""
+          - goos: openbsd
+            goarch: arm64
+            ext: ""
+    steps:
+      - name: Checkout Freedom To Parrots
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Checkout olcrtc tunnel core
+        uses: actions/checkout@v4
+        with:
+          repository: openlibrecommunity/olcrtc
+          ref: ${{ github.event.inputs.core_ref || env.DEFAULT_CORE_REF }}
+          path: olcrtc-core
+
+      - name: Build tunnel core for ${{ matrix.goos }}/${{ matrix.goarch }}
+        working-directory: olcrtc-core
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: "0"
+        run: |
+          set -euo pipefail
+          mkdir -p ../internal/corebin/bin
+          if [ "${{ matrix.goos }}" = "windows" ]; then
+            dest=../internal/corebin/bin/core.exe
+          else
+            dest=../internal/corebin/bin/core
+          fi
+          rm -f "$dest"
+          go build -trimpath -ldflags "-s -w" -o "$dest" ./cmd/olcrtc
+
+      - name: Build Freedom To Parrots for ${{ matrix.goos }}/${{ matrix.goarch }}
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: "0"
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          version="${GITHUB_REF_NAME:-dev}"
+          out="dist/FreedomToParrots-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.ext }}"
+          go build -trimpath -ldflags "-s -w -X main.version=${version}" -o "$out" ./cmd/fzp
+          ls -la dist/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FreedomToParrots-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: dist/*
+          if-no-files-found: error
+
+  release:
+    name: Publish GitHub Release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Flatten artifacts
+        run: |
+          mkdir -p dist
+          find artifacts -type f -exec cp {} dist/ \;
+          ls -la dist/
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
+          draft: false

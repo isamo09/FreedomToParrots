@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Freedom To Parrots — вход</title>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body class="login-body">
+<div class="login-card">
+  <div class="mark">FP</div>
+  <h1>Freedom To Parrots</h1>
+  <p class="sub">Пароль от панели показан в консоли, где запущена программа.</p>
+  <div id="err" style="display:none" class="err">Неверный пароль</div>
+  <form method="POST" action="/login">
+    <input type="password" name="password" placeholder="Пароль" autofocus required
+           style="margin-bottom:10px">
+    <button type="submit" class="primary" style="width:100%">Войти</button>
+  </form>
+  <p class="note">Не видите консоль? Она открылась вместе с программой — на Windows это
+    отдельное окно, в терминале — тот же экран, откуда она была запущена.</p>
+</div>
+<script>
+if (new URLSearchParams(location.search).get("error")) {
+  document.getElementById("err").style.display = "block";
+}
+</script>
+</body>
+</html>

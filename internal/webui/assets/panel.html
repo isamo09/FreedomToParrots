@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Freedom To Parrots — панель</title>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<div class="shell">
+  <nav class="top">
+    <a class="brand" href="/"><span class="mark">FP</span>Freedom To Parrots</a>
+    <div class="links">
+      <a href="/" class="current">Панель</a>
+      <a href="/download">Клиент и инструкции</a>
+    </div>
+    <div class="spacer"></div>
+    <a class="gh" href="https://github.com/isamo09/FreedomToParrots" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+    <button class="ghost" onclick="location='/logout'">Выйти</button>
+  </nav>
+
+  <div class="dash-head">
+    <h1>Устройства</h1>
+    <span class="count" id="count"></span>
+  </div>
+
+  <div class="problems" id="problems"></div>
+  <div id="err"></div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<dialog id="dlg">
+  <div class="dh"><h2 id="dlg-t"></h2><button onclick="dlg.close()">Закрыть</button></div>
+  <div class="db" id="dlg-b"></div>
+</dialog>
+
+<dialog id="ed">
+  <div class="dh"><h2 id="ed-t">Устройство</h2><button type="button" onclick="ed.close()">Отмена</button></div>
+  <form class="db" id="ef" autocomplete="off">
+    <label><span>Название</span><input name="name" placeholder="телефон" required maxlength="40"></label>
+    <div class="two">
+      <label><span>Сервис</span><select name="provider"></select></label>
+      <label><span>Транспорт</span><select name="transport"></select></label>
+    </div>
+    <a class="mkroom" id="mkroom" href="https://telemost.yandex.ru/" target="_blank" rel="noopener noreferrer">
+      Создать встречу на Телемосте ↗</a>
+    <label><span>Room ID или ссылка</span>
+      <input name="room" placeholder="https://telemost.yandex.ru/j/68715972174269" required>
+      <span class="note" id="roomhint"></span></label>
+    <label><span>Лимит трафика</span>
+      <span class="lim"><input name="limit" placeholder="без ограничения" inputmode="decimal">
+        <select name="unit"><option>МБ</option><option selected>ГБ</option><option>ТБ</option></select></span></label>
+    <label class="chk"><input type="checkbox" name="debug">
+      <span>Подробный лог — точнее время активности, но лог растёт быстрее</span></label>
+    <div class="foot">
+      <button type="submit" class="primary" id="ef-save">Сохранить</button>
+      <button type="button" class="ghost" id="ef-reset">Сбросить счётчик трафика</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="/assets/panel.js"></script>
+</body>
+</html>
