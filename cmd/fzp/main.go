@@ -30,6 +30,13 @@ const defaultPort = 8858
 var version = "dev" //nolint:gochecknoglobals // set at link time
 
 func main() {
+	// Must run before anything touches os.Stdout: on Windows this binary is
+	// built with the GUI subsystem (see -H windowsgui in release.yml) so it
+	// isn't auto-launched through Windows Terminal's icon-less delegation -
+	// it needs to attach to (or allocate) its own console first. A no-op on
+	// every other OS.
+	console.AllocWindowsConsole()
+
 	if len(os.Args) > 1 && (os.Args[1] == "-v" || os.Args[1] == "--version") {
 		fmt.Println("Freedom To Parrots " + version)
 

@@ -4,6 +4,11 @@ package console
 
 import "context"
 
+// AllocWindowsConsole is a no-op outside Windows: every other OS we target
+// runs this as a normal process attached to whatever terminal launched it,
+// with no "default terminal application" delegation to work around.
+func AllocWindowsConsole() {}
+
 // enablePretty is a no-op outside Windows: every other terminal we target
 // (Linux, macOS, Termux, BSD) already speaks ANSI/UTF-8 out of the box.
 func enablePretty() {}

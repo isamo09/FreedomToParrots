@@ -40,7 +40,9 @@ jobs:
           for t in $targets; do
             os=${t%/*}; arch=${t#*/}
             echo "building $os/$arch"
-            GOOS=$os GOARCH=$arch CGO_ENABLED=0 go build -o /dev/null ./cmd/fzp
+            flags=""
+            [ "$os" = "windows" ] && flags="-H windowsgui"
+            GOOS=$os GOARCH=$arch CGO_ENABLED=0 go build -ldflags "$flags" -o /dev/null ./cmd/fzp
           done
 
       - name: go test

@@ -120,7 +120,15 @@ jobs:
           mkdir -p dist
           version="${GITHUB_REF_NAME:-dev}"
           out="dist/FreedomToParrots-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.ext }}"
-          go build -trimpath -ldflags "-s -w -X main.version=${version}" -o "$out" ./cmd/fzp
+          flags="-s -w -X main.version=${version}"
+          if [ "${{ matrix.goos }}" = "windows" ]; then
+            # GUI subsystem: lets the binary attach to (or allocate) its own
+            # console instead of being auto-launched through Windows
+            # Terminal's delegation, which shows WT's own icon instead of
+            # this exe's (see internal/console/term_windows.go).
+            flags="$flags -H windowsgui"
+          fi
+          go build -trimpath -ldflags "$flags" -o "$out" ./cmd/fzp
           ls -la dist/
 
       - name: Upload artifact

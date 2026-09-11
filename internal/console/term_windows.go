@@ -5,6 +5,7 @@ package console
 import (
 	"context"
 	"fmt"
+	"os"
 	"sync"
 	"time"
 	"unsafe"
@@ -16,22 +17,61 @@ var ( //nolint:gochecknoglobals // lazy-loaded Win32 procedures, standard patter
 	modkernel32               = windows.NewLazySystemDLL("kernel32.dll")
 	procSetConsoleTitleW      = modkernel32.NewProc("SetConsoleTitleW")
 	procSetConsoleCtrlHandler = modkernel32.NewProc("SetConsoleCtrlHandler")
+	procAttachConsole         = modkernel32.NewProc("AttachConsole")
+	procAllocConsole          = modkernel32.NewProc("AllocConsole")
 )
+
+const attachParentProcess = ^uintptr(0) // ATTACH_PARENT_PROCESS (-1 as DWORD)
+
+// AllocWindowsConsole gives the process a real console of its own, built
+// with the GUI subsystem (see the -H windowsgui linker flag in
+// release.yml/scripts) specifically so Windows doesn't auto-launch it
+// through Windows Terminal's "default terminal application" delegation -
+// that delegation shows Windows Terminal's own tab/window icon instead of
+// this exe's icon (cmd/fzp/rsrc_windows_amd64.syso), no matter what's
+// embedded in the binary.
+//
+// Run from an existing shell/terminal, the parent process already has a
+// console - AttachConsole reuses it, so output lands inline exactly like
+// any normal CLI tool instead of popping a separate window. Only when
+// there's no parent console to attach to (double-clicked from Explorer, or
+// started by Task Scheduler) does it fall back to AllocConsole, which
+// creates a brand new window owned directly by this process - and that one
+// does get this exe's own icon.
+func AllocWindowsConsole() {
+	if r1, _, _ := procAttachConsole.Call(attachParentProcess); r1 == 0 { //nolint:gosec // fixed ATTACH_PARENT_PROCESS constant
+		_, _, _ = procAllocConsole.Call()
+	}
+
+	if f, err := os.OpenFile("CONOUT$", os.O_WRONLY, 0); err == nil { //nolint:gosec // fixed console pseudo-filename
+		os.Stdout, os.Stderr = f, f
+	}
+
+	if f, err := os.OpenFile("CONIN$", os.O_RDONLY, 0); err == nil { //nolint:gosec // fixed console pseudo-filename
+		os.Stdin = f
+	}
+}
 
 // enablePretty turns on ANSI escape processing and UTF-8 output on the
 // legacy Windows console host, so box-drawing characters and OSC 8
 // hyperlinks render instead of showing up as raw escape codes or "?????".
 // Modern Windows Terminal already supports both; this is what makes the
 // same output work in plain cmd.exe / the old conhost too.
+//
+// Reads the console handle fresh off os.Stdout rather than the x/sys/windows
+// package-level Stdout var: that var is captured once at process startup,
+// before AllocWindowsConsole above has necessarily run, so it can be stale.
 func enablePretty() {
 	_ = windows.SetConsoleOutputCP(65001)
 
+	h := windows.Handle(os.Stdout.Fd()) //nolint:gosec // os.File.Fd() truncation is a documented Windows-handle pattern
+
 	var mode uint32
-	if err := windows.GetConsoleMode(windows.Stdout, &mode); err != nil {
+	if err := windows.GetConsoleMode(h, &mode); err != nil {
 		return
 	}
 
-	_ = windows.SetConsoleMode(windows.Stdout, mode|windows.ENABLE_VIRTUAL_TERMINAL_PROCESSING)
+	_ = windows.SetConsoleMode(h, mode|windows.ENABLE_VIRTUAL_TERMINAL_PROCESSING)
 }
 
 // setTitle sets the console window's title (shown in its title bar and in

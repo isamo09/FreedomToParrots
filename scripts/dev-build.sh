@@ -42,9 +42,11 @@ fi
 
 mkdir -p "$root/dist"
 out="$root/dist/FreedomToParrots-$GOOS-$GOARCH$ext"
+flags="-s -w -X main.version=dev"
+[ "$GOOS" = "windows" ] && flags="$flags -H windowsgui"
 echo "building fzp -> $out"
 GOOS="$GOOS" GOARCH="$GOARCH" CGO_ENABLED=0 \
-  go build -trimpath -ldflags "-s -w -X main.version=dev" -o "$out" ./cmd/fzp
+  go build -trimpath -ldflags "$flags" -o "$out" ./cmd/fzp
 
 echo "done: $out"
 echo

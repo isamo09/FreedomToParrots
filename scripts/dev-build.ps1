@@ -48,9 +48,11 @@ if ($goos -eq "windows" -and (Get-Command go-winres -ErrorAction SilentlyContinu
 
 New-Item -ItemType Directory -Force -Path "$root\dist" | Out-Null
 $out = "$root\dist\FreedomToParrots-$goos-$goarch$ext"
+$flags = "-s -w -X main.version=dev"
+if ($goos -eq "windows") { $flags = "$flags -H windowsgui" }
 Write-Host "building fzp -> $out"
 $env:GOOS = $goos; $env:GOARCH = $goarch; $env:CGO_ENABLED = "0"
-go build -trimpath -ldflags "-s -w -X main.version=dev" -o $out ./cmd/fzp
+go build -trimpath -ldflags $flags -o $out ./cmd/fzp
 if ($LASTEXITCODE -ne 0) { throw "fzp build failed" }
 
 Write-Host "`ndone: $out"
