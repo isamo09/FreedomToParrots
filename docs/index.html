@@ -47,10 +47,13 @@
       <li>Выберите, где будет <b>сервер</b>, к которому подключаются клиенты — это может быть любой
         ПК, ноутбук или даже телефон — и скачайте под него совместимую сборку из
         <a href="https://github.com/isamo09/FreedomToParrots/releases/latest" target="_blank" rel="noopener noreferrer">последнего релиза</a>.</li>
-      <li>Переместите исполняемый файл в папку, где он будет постоянно работать (рядом с ним
-        сам появится каталог с настройками и ключами).</li>
-      <li>Запустите его и откройте панель управления по адресу из консоли, войдя по
-        отображённому там паролю.</li>
+      <li>Создайте для программы отдельную папку и переместите скачанный файл туда — не
+        запускайте его прямо из «Загрузок»: рядом с ним появятся настройки, ключи и логи, и
+        удобнее, когда это всё в одном отдельном месте, например:
+        <div class="callout mono" style="margin-top:6px">mkdir FreedomToParrots &amp;&amp; cd FreedomToParrots</div>
+      </li>
+      <li>Запустите его <em>из этой папки</em> и откройте панель управления по адресу из консоли,
+        войдя по отображённому там паролю.</li>
       <li>В панели нажмите «Добавить устройство», указав ссылку на активный звонок — например,
         на Яндекс Телемосте.</li>
       <li>Получите QR-код или ключ для настройки подключения этого устройства.</li>
@@ -59,6 +62,10 @@
     </ol>
     <div class="callout">Для устойчивой работы рекомендуется выйти из самого звонка в
       клиенте-звонилке, не завершая его — интернет-туннель при этом продолжит работать.</div>
+    <div class="callout"><b>Серверу нужен стабильный выход в интернет</b> — обычного домашнего
+      Wi-Fi роутера достаточно — и он должен быть включён и запущен всё то время, пока к нему
+      должны подключаться клиенты. Выключили компьютер с сервером или он ушёл в спящий режим —
+      подключение работать не будет, пока его не запустят заново.</div>
   </section>
 
   <nav class="toc">
@@ -77,7 +84,13 @@
     <p><a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-windows-amd64.exe">⭳ FreedomToParrots-windows-amd64.exe</a></p>
     <ol>
       <li>Скачайте файл по ссылке выше (это всегда сборка из последнего релиза).</li>
-      <li>Запустите двойным кликом — откроется отдельное окно консоли с иконкой и названием
+      <li>Создайте для программы отдельную папку — не запускайте её прямо из «Загрузок» — и
+        переместите скачанный <code class="mono">.exe</code> в неё. Через проводник: правой
+        кнопкой → «Создать» → «Папку»; в PowerShell то же самое одной командой:
+        <div class="callout mono" style="margin-top:6px">mkdir FreedomToParrots; cd FreedomToParrots</div>
+        затем переместите exe в открывшуюся папку.</li>
+      <li>Запустите файл двойным кликом <em>именно из этой папки</em> — рядом с ним появятся
+        настройки, ключи и логи. Откроется отдельное окно консоли с иконкой и названием
         Freedom To Parrots. Windows SmartScreen может предупредить про «неизвестного издателя»:
         это ожидаемо для нового публичного релиза без платной подписи —
         «Подробнее → Выполнить в любом случае».</li>
@@ -101,9 +114,14 @@
       <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-linux-arm64">⭳ FreedomToParrots-linux-arm64</a>
     </p>
     <ol>
-      <li>Скачайте бинарник под вашу архитектуру: amd64 — обычный сервер/ПК, arm64 — ARM-сервер,
-        Raspberry Pi.</li>
-      <li>Сделайте исполняемым и запустите:
+      <li>Создайте отдельную папку для программы и перейдите в неё — не запускайте бинарник
+        прямо из <code class="mono">~/Downloads</code>, рядом с ним появятся настройки, ключи
+        и логи:
+        <div class="callout mono" style="margin-top:6px">mkdir FreedomToParrots &amp;&amp; cd FreedomToParrots</div>
+      </li>
+      <li>Скачайте в неё бинарник под вашу архитектуру: amd64 — обычный сервер/ПК, arm64 —
+        ARM-сервер, Raspberry Pi.</li>
+      <li>Сделайте исполняемым и запустите <em>из этой же папки</em>:
         <div class="callout mono" style="margin-top:6px">chmod +x FreedomToParrots-linux-amd64<br>./FreedomToParrots-linux-amd64</div>
       </li>
       <li>Адрес панели и пароль будут выведены прямо в терминал.</li>
@@ -121,8 +139,11 @@
       <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-darwin-amd64">⭳ FreedomToParrots-darwin-amd64 (Intel)</a>
     </p>
     <ol>
-      <li>Скачайте файл по ссылке выше — под свой процессор.</li>
-      <li>В Терминале: <span class="mono">chmod +x FreedomToParrots-darwin-arm64 &amp;&amp;
+      <li>Создайте отдельную папку для программы и переместите туда скачанный файл — не
+        запускайте его прямо из «Загрузок»:
+        <div class="callout mono" style="margin-top:6px">mkdir FreedomToParrots &amp;&amp; cd FreedomToParrots</div>
+      </li>
+      <li>В Терминале, из этой папки: <span class="mono">chmod +x FreedomToParrots-darwin-arm64 &amp;&amp;
         ./FreedomToParrots-darwin-arm64</span></li>
       <li>Gatekeeper спросит про неподписанный бинарник — разрешите запуск через
         «Системные настройки → Конфиденциальность и безопасность → Всё равно открыть».</li>
@@ -137,8 +158,8 @@
     <p><a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-linux-arm64">⭳ FreedomToParrots-linux-arm64</a></p>
     <ol>
       <li>Установите <a href="https://f-droid.org/packages/com.termux/" target="_blank" rel="noopener noreferrer">Termux</a> (из F-Droid — версия из Google Play устарела и не обновляется).</li>
-      <li>Скачайте бинарник прямо в Termux:
-        <div class="callout mono" style="margin-top:6px">curl -LO https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-linux-arm64</div></li>
+      <li>Создайте отдельную папку и перейдите в неё, затем скачайте бинарник прямо в Termux:
+        <div class="callout mono" style="margin-top:6px">mkdir FreedomToParrots &amp;&amp; cd FreedomToParrots<br>curl -LO https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-linux-arm64</div></li>
       <li><span class="mono">chmod +x FreedomToParrots-linux-arm64 &amp;&amp; ./FreedomToParrots-linux-arm64</span></li>
     </ol>
     <div class="callout"><b>Известное ограничение:</b> на Android 11+ (API 30+) без root SELinux
@@ -152,8 +173,9 @@
   <section class="plat" id="other">
     <h2><span class="badge">Сервер</span>FreeBSD, OpenBSD и другие</h2>
     <p class="lead">Ядро туннеля собирается для FreeBSD и OpenBSD (amd64/arm64) без cgo, так что
-      релиз включает и их. Запуск — так же, как на Linux (сделать исполняемым и запустить из
-      терминала).</p>
+      релиз включает и их. Запуск — так же, как на Linux: отдельная папка
+      (<code class="mono">mkdir FreedomToParrots &amp;&amp; cd FreedomToParrots</code>), в неё —
+      скачанный бинарник, сделать исполняемым и запустить из терминала.</p>
     <p>
       <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-freebsd-amd64">⭳ freebsd-amd64</a>
       <a class="dl" href="https://github.com/isamo09/FreedomToParrots/releases/latest/download/FreedomToParrots-freebsd-arm64">⭳ freebsd-arm64</a>
@@ -210,6 +232,33 @@
         которой запущена программа — прокрутите её вывод вверх, если пропустили. Изменить пароль
         можно, отредактировав <code class="mono">data/settings.json</code> рядом с исполняемым
         файлом, и перезапустив программу.</p>
+    </details>
+    <details>
+      <summary>Это обходит белые списки?</summary>
+      <p>Зависит от выбранного сервиса-провайдера видеозвонков, а не является гарантированным
+        свойством самого инструмента. olcrtc не открывает доступ «из ниоткуда» — он прячет
+        TCP-трафик внутри настоящего WebRTC-соединения с одним из поддерживаемых провайдеров
+        (Jitsi, Яндекс Телемост, WbStream). Если сеть ограничивает доступ именно белым списком
+        разрешённых адресов и нужного провайдера в этом списке нет — само видеосоединение с ним
+        не установится, и туннель внутри него тоже не поднимется. Если же провайдер в сети
+        разрешён (например, домены Jitsi/Телемоста/WbStream не заблокированы), туннель внутри
+        такого разрешённого соединения работает. Так что практический смысл есть в первую
+        очередь там, где ограничивают по спискам домен-в-домен или по типу трафика, а не там, где
+        сами эти видеосервисы тоже недоступны.</p>
+    </details>
+    <details>
+      <summary>Насколько это безопасно и на чём вообще держится?</summary>
+      <p>Принцип olcrtc: вместо обычного TCP-соединения к нужному сайту устанавливается настоящее
+        зашифрованное WebRTC-соединение с одним из провайдеров видеозвонков, и внутри него —
+        поверх видео-, аудио- или дата-канала — передаётся туннелируемый трафик, дополнительно
+        зашифрованный собственным ключом каждого устройства. Со стороны сети это выглядит как
+        обычный видеозвонок к обычному публичному сервису. Но это не независимая гарантия: вся
+        схема держится на милости конкретного провайдера (веб-платформы) — если Jitsi, Яндекс
+        Телемост или WbStream начнут детектировать и блокировать такой паттерн трафика, изменят
+        протокол или закроют используемые режимы (как WbStream уже ограничивает часть транспортов
+        для обычных гостей звонка), туннель через них перестанет работать без какого-либо
+        предупреждения — это внешний фактор, никак не контролируемый ни ядром olcrtc, ни этой
+        панелью.</p>
     </details>
     <details>
       <summary>Почему при первом запуске пишет «недоступно на этой ОС» про трафик?</summary>
