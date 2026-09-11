@@ -43,11 +43,18 @@ func AllocWindowsConsole() {
 		_, _, _ = procAllocConsole.Call()
 	}
 
-	if f, err := os.OpenFile("CONOUT$", os.O_WRONLY, 0); err == nil { //nolint:gosec // fixed console pseudo-filename
+	// O_RDWR, not O_WRONLY/O_RDONLY: GetConsoleMode/SetConsoleMode require
+	// GENERIC_READ on the handle even for the *output* buffer - a
+	// write-only CONOUT$ handle fails GetConsoleMode silently, which is
+	// exactly what broke enablePretty() below (ANSI processing never
+	// actually turned on, so every escape code - clear-screen included -
+	// printed as literal garbage instead of being interpreted, and the
+	// screen never cleared between redraws).
+	if f, err := os.OpenFile("CONOUT$", os.O_RDWR, 0); err == nil { //nolint:gosec // fixed console pseudo-filename
 		os.Stdout, os.Stderr = f, f
 	}
 
-	if f, err := os.OpenFile("CONIN$", os.O_RDONLY, 0); err == nil { //nolint:gosec // fixed console pseudo-filename
+	if f, err := os.OpenFile("CONIN$", os.O_RDWR, 0); err == nil { //nolint:gosec // fixed console pseudo-filename
 		os.Stdin = f
 	}
 }
