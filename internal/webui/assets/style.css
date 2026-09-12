@@ -133,6 +133,15 @@ body.login-body {
 .problem.crit { background: #3a2220; border-color: var(--alert); color: #f6c6bd; }
 .problem .ico { flex-shrink: 0; font-weight: 800; }
 
+.update-banner {
+  display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+  background: rgba(55, 201, 154, .1); border: 1px solid var(--brand); color: var(--text);
+  padding: 11px 14px; border-radius: 8px; font-size: 13.5px; margin: 16px 0;
+}
+.update-banner b { color: var(--brand); }
+.update-banner .spacer { flex: 1; }
+.update-banner.err { background: #3a2220; border-color: var(--alert); }
+
 /* ── session grid / cards ─────────────────────────────────────────────── */
 
 .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); margin-top: 8px; }

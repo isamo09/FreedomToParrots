@@ -75,6 +75,52 @@ function renderProblems(list) {
   ).join("");
 }
 
+function renderUpdate(u) {
+  const box = document.getElementById("update");
+  if (!u || !u.available) { box.innerHTML = ""; return; }
+  box.innerHTML = `<div class="update-banner">
+    <span>Доступна версия <b>${esc(u.latest)}</b> (сейчас ${esc(u.current)})</span>
+    <span class="spacer"></span>
+    ${u.url ? `<a class="ghost" href="${esc(u.url)}" target="_blank" rel="noopener noreferrer">Что нового ↗</a>` : ""}
+    <button class="primary" id="update-btn">Обновить и перезапустить</button>
+  </div>`;
+}
+
+document.getElementById("update").addEventListener("click", async (e) => {
+  const btn = e.target.closest("#update-btn");
+  if (!btn) return;
+  if (!confirm("Скачать и установить обновление? Панель на несколько секунд " +
+    "станет недоступна и сама перезапустится на новой версии.")) return;
+
+  btn.disabled = true; btn.textContent = "Обновляю…";
+  busy = true; // stop the periodic refresh below from fighting this view
+
+  try {
+    await api("/api/update/apply", { method: "POST" });
+  } catch (ex) {
+    document.getElementById("update").innerHTML =
+      '<div class="update-banner err">Не удалось обновиться: ' + esc(ex.message) + "</div>";
+    busy = false;
+    return;
+  }
+
+  document.getElementById("update").innerHTML =
+    '<div class="update-banner">Панель перезапускается на новой версии…</div>';
+  waitForRestart();
+});
+
+async function waitForRestart() {
+  await new Promise((r) => setTimeout(r, 2500));
+  for (let i = 0; i < 40; i++) {
+    try {
+      const r = await fetch("/api/state", { cache: "no-store" });
+      if (r.status === 200 || r.status === 401) { location.reload(); return; }
+    } catch (e) { /* still restarting */ }
+    await new Promise((r) => setTimeout(r, 1500));
+  }
+  location.reload();
+}
+
 function render(st) {
   PROVIDERS = st.providers || PROVIDERS;
   TRANSPORTS = st.transports || TRANSPORTS;
@@ -85,6 +131,7 @@ function render(st) {
     items.length ? `<b>${live}</b> из ${items.length} на связи` : "";
 
   renderProblems(st.problems);
+  renderUpdate(st.update);
 
   const cards = items.map((s) => {
     const dead = s.enabled && !s.running && !s.limited;
@@ -94,7 +141,7 @@ function render(st) {
       : '<span class="tag">выключена</span>';
 
     let traf;
-    if (!s.traffic_known && !s.running) {
+    if (!s.traffic_known) {
       traf = "Трафик недоступен на этой ОС";
     } else {
       traf = "Трафик ≈ <b>" + vol(s.traffic) + "</b>";

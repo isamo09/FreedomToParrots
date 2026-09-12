@@ -20,6 +20,7 @@ import (
 	"github.com/isamo09/FreedomToParrots/internal/corebin"
 	"github.com/isamo09/FreedomToParrots/internal/session"
 	"github.com/isamo09/FreedomToParrots/internal/store"
+	"github.com/isamo09/FreedomToParrots/internal/update"
 	"github.com/isamo09/FreedomToParrots/internal/webui"
 )
 
@@ -69,16 +70,26 @@ func run() error {
 
 	mgr.Restore()
 
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	// SIGHUP: what a closed terminal window sends on Linux/macOS/BSD - the
+	// Windows equivalent (the console's X button) is handled separately in
+	// internal/console (term_windows.go), since Windows has no such signal.
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM, syscall.SIGHUP)
 	defer stop()
 
 	mgr.RunLoops(ctx)
+
+	// Checks GitHub for a newer release at startup and every checkInterval
+	// after that. Never applies anything on its own - that needs explicit
+	// consent via the web panel's "Обновить" button or the console prompt,
+	// both of which call updates.Apply.
+	updates := update.NewTracker(version)
+	go updates.Run(ctx)
 
 	host, port := bindAddr()
 
 	httpSrv := &http.Server{
 		Addr:              net.JoinHostPort(host, strconv.Itoa(port)),
-		Handler:           webui.New(mgr, settings.Password).Handler(),
+		Handler:           webui.New(mgr, settings.Password, updates, stop).Handler(),
 		ReadHeaderTimeout: 10 * time.Second,
 	}
 
@@ -93,7 +104,7 @@ func run() error {
 		}
 	}()
 
-	dash := console.New(mgr, panelURLs(host, port), settings.Password, dataNote, version, stop)
+	dash := console.New(mgr, panelURLs(host, port), settings.Password, dataNote, version, stop, updates)
 	dash.Run(ctx) // blocks until Ctrl+C / SIGTERM
 
 	shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)

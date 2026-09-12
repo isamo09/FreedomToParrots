@@ -156,6 +156,18 @@ jobs:
           find artifacts -type f -exec cp {} dist/ \;
           ls -la dist/
 
+      - name: Generate checksums
+        # internal/update verifies every self-update download against this
+        # before installing it - Apply() refuses to proceed without a
+        # matching entry here, so this step isn't just for humans. Named
+        # distinctly (not plain SHA256SUMS.txt) because olcBOX's own
+        # checksums file of the same generic name also gets uploaded to
+        # this same release - see README-olcbox docs in the olcrtcPanel repo.
+        working-directory: dist
+        run: |
+          sha256sum * > FreedomToParrots-SHA256SUMS.txt
+          cat FreedomToParrots-SHA256SUMS.txt
+
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:

@@ -6,6 +6,7 @@
 package webui
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"io/fs"
@@ -15,6 +16,7 @@ import (
 
 	"github.com/isamo09/FreedomToParrots/internal/security"
 	"github.com/isamo09/FreedomToParrots/internal/session"
+	"github.com/isamo09/FreedomToParrots/internal/update"
 )
 
 const cookieName = "ftp_sid"
@@ -25,15 +27,20 @@ const cookieMaxAge = 30 * 24 * time.Hour
 type Server struct {
 	mgr      *session.Manager
 	password string
+	updates  *update.Tracker
+	shutdown context.CancelFunc
 
 	mu   sync.Mutex
 	sids map[string]time.Time
 }
 
 // New builds the HTTP handler for the panel. password is the current login
-// password (see internal/store.Settings).
-func New(mgr *session.Manager, password string) *Server {
-	return &Server{mgr: mgr, password: password, sids: make(map[string]time.Time)}
+// password (see internal/store.Settings). shutdown triggers the same
+// graceful-shutdown path Ctrl+C does - handleUpdateApply calls it once a
+// downloaded update has been installed, so the new version starts on the
+// next launch.
+func New(mgr *session.Manager, password string, updates *update.Tracker, shutdown context.CancelFunc) *Server {
+	return &Server{mgr: mgr, password: password, updates: updates, shutdown: shutdown, sids: make(map[string]time.Time)}
 }
 
 // Handler returns the http.Handler to serve.
@@ -57,6 +64,7 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("POST /api/sessions/{id}/rekey", s.auth(s.handleRekey))
 	mux.HandleFunc("POST /api/sessions/{id}/reset-traffic", s.auth(s.handleReset))
 	mux.HandleFunc("DELETE /api/sessions/{id}", s.auth(s.handleDelete))
+	mux.HandleFunc("POST /api/update/apply", s.auth(s.handleUpdateApply))
 
 	return mux
 }
@@ -159,6 +167,7 @@ type stateResponse struct {
 	Problems   []string         `json:"problems"`
 	Providers  []string         `json:"providers"`
 	Transports []string         `json:"transports"`
+	Update     update.Info      `json:"update"`
 }
 
 func (s *Server) handleState(w http.ResponseWriter, _ *http.Request) {
@@ -166,7 +175,28 @@ func (s *Server) handleState(w http.ResponseWriter, _ *http.Request) {
 	writeJSON(w, http.StatusOK, stateResponse{
 		Sessions: snap.Sessions, Problems: snap.Problems,
 		Providers: session.Providers, Transports: session.Transports,
+		Update: s.updates.Snapshot(),
 	})
+}
+
+// handleUpdateApply downloads and verifies the available update, replaces
+// this executable with it, starts the new version, and - only once all of
+// that has actually succeeded - triggers this instance's own graceful
+// shutdown so the new one takes over. A failure here changes nothing on
+// disk; this process just keeps running the version it was already on.
+func (s *Server) handleUpdateApply(w http.ResponseWriter, r *http.Request) {
+	if err := s.updates.Apply(r.Context()); err != nil {
+		writeJSON(w, http.StatusBadGateway, map[string]string{"error": err.Error()})
+
+		return
+	}
+
+	writeJSON(w, http.StatusOK, map[string]string{"status": "updating"})
+
+	go func() {
+		time.Sleep(500 * time.Millisecond) // let the response above actually reach the browser first
+		s.shutdown()
+	}()
 }
 
 func (s *Server) handleGet(w http.ResponseWriter, r *http.Request) {

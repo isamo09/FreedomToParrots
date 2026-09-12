@@ -10,9 +10,15 @@ import (
 // applyProcAttr puts the core process in its own process group so a signal
 // sent to the whole group (below) also reaches children it spawns itself -
 // videochannel launches ffmpeg as a separate process, and we don't want to
-// orphan it.
+// orphan it. setPdeathsig (Linux only - see pdeathsig_linux.go) additionally
+// asks the kernel to signal the core process itself if we die without ever
+// getting a chance to stop it - our own SIGHUP/SIGINT/SIGTERM handling in
+// main.go covers the normal cases, this is the same belt-and-suspenders
+// guarantee as the Windows Job Object in jobobject_windows.go.
 func applyProcAttr(cmd *exec.Cmd) {
-	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+	attr := &syscall.SysProcAttr{Setpgid: true}
+	setPdeathsig(attr)
+	cmd.SysProcAttr = attr
 }
 
 // stopProcess signals the process group led by pid: SIGTERM for a graceful
@@ -34,3 +40,7 @@ func stopProcess(pid int, graceful bool) {
 func killStray(pid int) {
 	_ = syscall.Kill(pid, syscall.SIGTERM)
 }
+
+// assignToJob is Windows-only (see jobobject_windows.go) - setPdeathsig
+// above is this platform's equivalent safety net.
+func assignToJob(int) {}

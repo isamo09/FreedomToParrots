@@ -56,6 +56,7 @@ func (m *Manager) startLocked(s *store.Session) error {
 	rt := &runtime{pid: cmd.Process.Pid, startedAt: time.Now(), logBase: logBase, done: make(chan struct{})}
 	m.rt[s.ID] = rt
 
+	assignToJob(rt.pid) // Windows: OS-level auto-kill-with-us safety net, see jobobject_windows.go
 	_ = os.WriteFile(pidPath(m.dirs, s.ID), []byte(strconv.Itoa(rt.pid)), 0o600)
 
 	id := s.ID
