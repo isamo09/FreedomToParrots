@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 620" width="1400" height="620" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4a5568"/>
+    </marker>
+    <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1400" height="620" fill="#ffffff"/>
+
+  <text x="700" y="42" text-anchor="middle" font-size="26" font-weight="700" fill="#1a202c">Путь трафика Freedom To Parrots</text>
+  <text x="700" y="70" text-anchor="middle" font-size="15" fill="#718096">Пользователь → Яндекс Телемост (два участника звонка) → Сервер → Интернет</text>
+
+  <!-- 1. User -->
+  <g>
+    <rect x="30" y="230" width="170" height="110" rx="14" fill="#ebf8ff" stroke="#3182ce" stroke-width="2"/>
+    <text x="115" y="270" text-anchor="middle" font-size="16" font-weight="700" fill="#2c5282">Пользователь</text>
+    <text x="115" y="293" text-anchor="middle" font-size="12.5" fill="#4a5568">браузер / приложение</text>
+    <text x="115" y="311" text-anchor="middle" font-size="12.5" fill="#4a5568">→ localhost SOCKS5</text>
+  </g>
+
+  <line x1="200" y1="285" x2="258" y2="285" stroke="#4a5568" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="229" y="272" text-anchor="middle" font-size="11.5" fill="#718096">1</text>
+
+  <!-- 2. olcrtc client -->
+  <g>
+    <rect x="260" y="215" width="190" height="150" rx="14" fill="#faf5ff" stroke="#805ad5" stroke-width="2"/>
+    <text x="355" y="250" text-anchor="middle" font-size="15.5" font-weight="700" fill="#553c9a">olcrtc-клиент</text>
+    <text x="355" y="272" text-anchor="middle" font-size="12.5" fill="#4a5568">(режим cnc)</text>
+    <text x="355" y="294" text-anchor="middle" font-size="12" fill="#4a5568">OLC2-шифрование</text>
+    <text x="355" y="315" text-anchor="middle" font-size="12" fill="#4a5568">входит в комнату</text>
+    <text x="355" y="336" text-anchor="middle" font-size="12" fill="#4a5568">как «Бот 1»</text>
+  </g>
+
+  <line x1="450" y1="285" x2="508" y2="285" stroke="#4a5568" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="479" y="272" text-anchor="middle" font-size="11.5" fill="#718096">2</text>
+
+  <!-- 3. Yandex Telemost room -->
+  <g>
+    <rect x="510" y="110" width="380" height="360" rx="18" fill="#fffaf0" stroke="#dd6b20" stroke-width="2.5"/>
+    <text x="700" y="142" text-anchor="middle" font-size="17" font-weight="700" fill="#9c4221">Яндекс Телемост — комната звонка</text>
+    <text x="700" y="163" text-anchor="middle" font-size="12" fill="#975a16">видит только двух участников обычного видеозвонка</text>
+
+    <!-- Bot 1 -->
+    <rect x="545" y="195" width="310" height="80" rx="12" fill="#fff5f5" stroke="#e53e3e" stroke-width="1.5"/>
+    <text x="700" y="225" text-anchor="middle" font-size="14.5" font-weight="700" fill="#9b2c2c">Участник 1 «Бот 1» (клиент)</text>
+    <text x="700" y="246" text-anchor="middle" font-size="12" fill="#742a2a">присоединился к комнате как обычный гость</text>
+    <text x="700" y="263" text-anchor="middle" font-size="12" fill="#742a2a">ICE / STUN / TURN — настоящее WebRTC-согласование</text>
+
+    <line x1="700" y1="275" x2="700" y2="345" stroke="#2b6cb0" stroke-width="2.5" marker-end="url(#arrow2)" marker-start="url(#arrow2)"/>
+    <text x="795" y="302" text-anchor="middle" font-size="11" fill="#2b6cb0" font-weight="600">WebRTC</text>
+    <text x="795" y="317" text-anchor="middle" font-size="11" fill="#2b6cb0" font-weight="600">(DTLS/SRTP)</text>
+    <text x="795" y="332" text-anchor="middle" font-size="11" fill="#2b6cb0" font-weight="600">+ OLC2</text>
+
+    <!-- Bot 2 -->
+    <rect x="545" y="345" width="310" height="80" rx="12" fill="#fff5f5" stroke="#e53e3e" stroke-width="1.5"/>
+    <text x="700" y="375" text-anchor="middle" font-size="14.5" font-weight="700" fill="#9b2c2c">Участник 2 «Бот 2» (сервер)</text>
+    <text x="700" y="396" text-anchor="middle" font-size="12" fill="#742a2a">второй участник той же комнаты</text>
+    <text x="700" y="413" text-anchor="middle" font-size="12" fill="#742a2a">принимает и расшифровывает туннель</text>
+  </g>
+
+  <line x1="890" y1="385" x2="948" y2="385" stroke="#4a5568" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="919" y="372" text-anchor="middle" font-size="11.5" fill="#718096">3</text>
+
+  <!-- 4. Server -->
+  <g>
+    <rect x="950" y="330" width="190" height="110" rx="14" fill="#f0fff4" stroke="#38a169" stroke-width="2"/>
+    <text x="1045" y="367" text-anchor="middle" font-size="15.5" font-weight="700" fill="#276749">Сервер</text>
+    <text x="1045" y="388" text-anchor="middle" font-size="12.5" fill="#4a5568">Freedom To Parrots</text>
+    <text x="1045" y="406" text-anchor="middle" font-size="12" fill="#4a5568">(режим srv)</text>
+    <text x="1045" y="424" text-anchor="middle" font-size="12" fill="#4a5568">обычный локальный процесс</text>
+  </g>
+
+  <line x1="1140" y1="385" x2="1198" y2="385" stroke="#4a5568" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="1169" y="372" text-anchor="middle" font-size="11.5" fill="#718096">4</text>
+
+  <!-- 5. Internet -->
+  <g>
+    <path d="M1230 400 q-20 -55 35 -60 q5 -35 45 -35 q40 0 45 30 q35 0 35 30 q0 30 -30 32 q0 3 0 3 l-125 0 q-25 -2 -5 0 z"
+          fill="#ebf8ff" stroke="#3182ce" stroke-width="2"/>
+    <text x="1310" y="405" text-anchor="middle" font-size="14" font-weight="700" fill="#2c5282">Интернет</text>
+    <text x="1310" y="445" text-anchor="middle" font-size="12" fill="#4a5568">нужный сайт / сервис,</text>
+    <text x="1310" y="461" text-anchor="middle" font-size="12" fill="#4a5568">обычный исходящий трафик</text>
+  </g>
+
+  <!-- footnote -->
+  <text x="700" y="560" text-anchor="middle" font-size="12.5" fill="#a0aec0">
+    Для сети между Ботом 1 и Ботом 2 это выглядит как обычный видеозвонок между двумя людьми — не как туннель.
+  </text>
+  <text x="700" y="582" text-anchor="middle" font-size="12" fill="#a0aec0">github.com/isamo09/FreedomToParrots</text>
+</svg>
