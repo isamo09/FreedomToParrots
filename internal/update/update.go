@@ -298,6 +298,19 @@ func (t *Tracker) Apply(ctx context.Context) error {
 	return relaunch()
 }
 
+// CleanupOld removes a leftover "<exe>.old" from a previous Apply that
+// couldn't delete it immediately (the old executable can still briefly be
+// "in use" right as the process exits). Safe to call on every startup -
+// it's a no-op when there's nothing to clean up.
+func CleanupOld() {
+	exe, err := runningExecutable()
+	if err != nil {
+		return
+	}
+
+	_ = os.Remove(exe + ".old")
+}
+
 func applyInfo(ctx context.Context, info Info) error {
 	exe, err := runningExecutable()
 	if err != nil {

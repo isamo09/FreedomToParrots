@@ -13,6 +13,7 @@ import (
 	"os"
 	"os/signal"
 	"strconv"
+	"strings"
 	"syscall"
 	"time"
 
@@ -51,6 +52,8 @@ func main() {
 }
 
 func run() error {
+	update.CleanupOld() // leftover "<exe>.old" from a previous self-update, if any
+
 	dirs, dataNote, err := store.Resolve()
 	if err != nil {
 		return fmt.Errorf("resolve data directory: %w", err)
@@ -93,7 +96,7 @@ func run() error {
 		ReadHeaderTimeout: 10 * time.Second,
 	}
 
-	ln, err := net.Listen("tcp", httpSrv.Addr)
+	ln, err := listenWithRetry(httpSrv.Addr)
 	if err != nil {
 		return fmt.Errorf("panel can't listen on %s: %w", httpSrv.Addr, err)
 	}
@@ -114,6 +117,37 @@ func run() error {
 	mgr.StopAll()
 
 	return nil
+}
+
+// listenWithRetry binds addr, retrying for a while on "address in use"
+// before giving up. This is what makes self-update's handoff work: the new
+// process gets started (see internal/update.relaunch) before the old one
+// has necessarily released the port yet - httpSrv.Shutdown on the old side
+// normally frees it within a second or two, well inside this window. Any
+// other error (e.g. a genuinely different process already on that port)
+// fails immediately, same as before.
+func listenWithRetry(addr string) (net.Listener, error) {
+	const attempts = 15
+
+	var lastErr error
+
+	for i := 0; i < attempts; i++ {
+		ln, err := net.Listen("tcp", addr)
+		if err == nil {
+			return ln, nil
+		}
+
+		lastErr = err
+
+		if !strings.Contains(err.Error(), "address already in use") &&
+			!strings.Contains(err.Error(), "Only one usage of each socket address") {
+			return nil, err
+		}
+
+		time.Sleep(500 * time.Millisecond)
+	}
+
+	return nil, lastErr
 }
 
 func bindAddr() (string, int) {
